@@ -21,7 +21,7 @@ import pandas as pd
 # =========================
 # CONFIGURATION
 # =========================
-BASE_DIR = "./wildsnap-dataset-use"
+BASE_DIR = "../wildsnap-dataset"
 BATCH_SIZE = 32
 EPOCHS = 10
 
@@ -96,85 +96,85 @@ def classReport(model, name, test_gen):
 # =========================
 # Main Training Loop
 # =========================
-# for name, backbone in backbones.items():
-#     print(f"\nTraining {name}...\n")
+for name, backbone in backbones.items():
+    print(f"\nTraining {name}...\n")
 
-#     IMG_SIZE = recommended_sizes[name]
+    IMG_SIZE = recommended_sizes[name]
 
-#     # Use EfficientNet-specific preprocessing
-#     if "EfficientNet" in name:
-#         train_datagen = ImageDataGenerator(preprocessing_function=effnet_preprocess)
-#         val_datagen = ImageDataGenerator(preprocessing_function=effnet_preprocess)
-#     else:
-#         train_datagen = ImageDataGenerator(rescale=1./255, rotation_range=20, zoom_range=0.2, horizontal_flip=True)
-#         val_datagen = ImageDataGenerator(rescale=1./255)
+    # Use EfficientNet-specific preprocessing
+    if "EfficientNet" in name:
+        train_datagen = ImageDataGenerator(preprocessing_function=effnet_preprocess)
+        val_datagen = ImageDataGenerator(preprocessing_function=effnet_preprocess)
+    else:
+        train_datagen = ImageDataGenerator(rescale=1./255, rotation_range=20, zoom_range=0.2, horizontal_flip=True)
+        val_datagen = ImageDataGenerator(rescale=1./255)
 
-#     # Data Loaders
-#     train_gen = train_datagen.flow_from_directory(
-#         os.path.join(BASE_DIR, 'train'),
-#         target_size=IMG_SIZE,
-#         batch_size=BATCH_SIZE,
-#         class_mode='categorical'
-#     )
-#     val_gen = val_datagen.flow_from_directory(
-#         os.path.join(BASE_DIR, 'val'),
-#         target_size=IMG_SIZE,
-#         batch_size=BATCH_SIZE,
-#         class_mode='categorical'
-#     )
-#     test_gen = val_datagen.flow_from_directory(
-#         os.path.join(BASE_DIR, 'test'),
-#         target_size=IMG_SIZE,
-#         batch_size=BATCH_SIZE,
-#         class_mode='categorical',
-#         shuffle=False
-#     )
+    # Data Loaders
+    train_gen = train_datagen.flow_from_directory(
+        os.path.join(BASE_DIR, 'train'),
+        target_size=IMG_SIZE,
+        batch_size=BATCH_SIZE,
+        class_mode='categorical'
+    )
+    val_gen = val_datagen.flow_from_directory(
+        os.path.join(BASE_DIR, 'val'),
+        target_size=IMG_SIZE,
+        batch_size=BATCH_SIZE,
+        class_mode='categorical'
+    )
+    test_gen = val_datagen.flow_from_directory(
+        os.path.join(BASE_DIR, 'test'),
+        target_size=IMG_SIZE,
+        batch_size=BATCH_SIZE,
+        class_mode='categorical',
+        shuffle=False
+    )
 
-#     base_model = backbone(include_top=False, weights=None, input_shape=(IMG_SIZE[0], IMG_SIZE[1], 3))
+    base_model = backbone(include_top=False, weights=None, input_shape=(IMG_SIZE[0], IMG_SIZE[1], 3))
 
-#     base_model.trainable = False
+    base_model.trainable = False
 
-#     model = models.Sequential([
-#         base_model,
-#         layers.GlobalAveragePooling2D(),
-#         layers.Dense(128, activation='relu'),
-#         layers.Dropout(0.3),
-#         layers.Dense(train_gen.num_classes, activation='softmax')
-#     ])
+    model = models.Sequential([
+        base_model,
+        layers.GlobalAveragePooling2D(),
+        layers.Dense(128, activation='relu'),
+        layers.Dropout(0.3),
+        layers.Dense(train_gen.num_classes, activation='softmax')
+    ])
 
-#     model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+    model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
 
-#     es = EarlyStopping(patience=3, restore_best_weights=True)
-#     history = model.fit(train_gen, validation_data=val_gen, epochs=EPOCHS, callbacks=[es])
+    es = EarlyStopping(patience=3, restore_best_weights=True)
+    history = model.fit(train_gen, validation_data=val_gen, epochs=EPOCHS, callbacks=[es])
 
-#     # Evaluation
-#     test_loss, test_acc = model.evaluate(test_gen)
-#     results[name] = round(test_acc * 100, 3)
+    # Evaluation
+    test_loss, test_acc = model.evaluate(test_gen)
+    results[name] = round(test_acc * 100, 3)
 
-#     # MLflow logging
-#     logMlFlow(model, name, IMG_SIZE, EPOCHS, test_acc, test_loss)
-#     classReport(model, name, test_gen)
+    # MLflow logging
+    logMlFlow(model, name, IMG_SIZE, EPOCHS, test_acc, test_loss)
+    classReport(model, name, test_gen)
 
-#     model.save(f"{name}.h5")
-#     print(f"Saved model: {name}.h5")
+    model.save(f"{name}.h5")
+    print(f"Saved model: {name}.h5")
 
 # =========================
 # Final Comparison
 # =========================
-# best_model = max(results, key=results.get)
+best_model = max(results, key=results.get)
 
-# print("\nFinal Accuracy Comparison:")
-# for model_name, acc in results.items():
-#     print(f"{model_name}: {acc}%")
+print("\nFinal Accuracy Comparison:")
+for model_name, acc in results.items():
+    print(f"{model_name}: {acc}%")
 
-# print(f"\nBest model: {best_model}")
-# mlflow.log_param("best_model", best_model)
+print(f"\nBest model: {best_model}")
+mlflow.log_param("best_model", best_model)
 
-# # Plot
-# plt.figure(figsize=(10, 6))
-# plt.bar(results.keys(), results.values(), color='lightgreen')
-# plt.title("Model Accuracy Comparison")
-# plt.ylabel("Accuracy (%)")
-# plt.ylim(0, 100)
-# plt.savefig("model_accuracy_comparison.png")
-# plt.close()
+# Plot
+plt.figure(figsize=(10, 6))
+plt.bar(results.keys(), results.values(), color='lightgreen')
+plt.title("Model Accuracy Comparison")
+plt.ylabel("Accuracy (%)")
+plt.ylim(0, 100)
+plt.savefig("model_accuracy_comparison.png")
+plt.close()

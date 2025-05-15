@@ -1,0 +1,16 @@
+artifact_uri: file:///Users/smileyfacez/Wildsnap/ml_models/mlruns/0/232d98195647437faa9d45c9edb5577e/artifacts
+deleted_time: 1747298399013
+end_time: 1747247332294
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: deleted
+run_id: 232d98195647437faa9d45c9edb5577e
+run_name: MobileNetV2
+run_uuid: 232d98195647437faa9d45c9edb5577e
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1747247324462
+status: 3
+tags: []
+user_id: smileyfacez

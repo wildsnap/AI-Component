@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/smileyfacez/Wildsnap/ml_models/mlruns/0/fdc59360916c40158a3ad9c600112306/artifacts
+end_time: 1747299971142
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: fdc59360916c40158a3ad9c600112306
+run_name: EfficientNetB0
+run_uuid: fdc59360916c40158a3ad9c600112306
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1747299961679
+status: 3
+tags: []
+user_id: smileyfacez
