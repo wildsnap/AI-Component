@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/smileyfacez/Wildsnap/ml_models/mlruns/0/53caad8263e94b42a2b2f1fe3ae53702/artifacts
+end_time: 1747247522660
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 53caad8263e94b42a2b2f1fe3ae53702
+run_name: valuable-quail-107
+run_uuid: 53caad8263e94b42a2b2f1fe3ae53702
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1747247522623
+status: 3
+tags: []
+user_id: smileyfacez
